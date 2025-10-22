@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japan Travel Helper - 言語サポート</title>
+    <link rel="stylesheet" href="css_gengo.css">
+</head>
+<body>
+    <header>
+        <h1>🇯🇵 Japan Travel Helper</h1>
+        <p>Your instant language solution in Japan.</p>
+    </header>
+
+    <main>
+        <section id="translation">
+            <h2>1. リアルタイム翻訳 / Instant Translation</h2>
+            <label for="targetLanguage">翻訳先言語を選択:</label>
+            <select id="targetLanguage">
+                <option value="en" selected>英語 (English)</option>
+                <option value="zh-CN">中国語 (Chinese Simplified)</option>
+                <option value="ko">韓国語 (Korean)</option>
+                <option value="fr">フランス語 (French)</option>
+                <option value="es">スペイン語 (Spanish)</option>
+                </select>
+
+            <div class="input-area">
+                <textarea id="inputText" placeholder="翻訳したいテキストを入力してください (Enter text to translate)"></textarea>
+                <button onclick="translateText()">外部翻訳アプリで開く (Open in external app)</button>
+            </div>
+            <p class="note">※この機能は、入力内容をGoogle翻訳のウェブサイトに渡し、リアルタイム翻訳を実行します。</p>
+        </section>
+
+        <hr>
+
+        <section id="conversation">
+            <h2>2. 日常会話を読み上げ / Speak Japanese Phrases</h2>
+            <p>聞きたいフレーズをタップしてください。日本語を読み上げます。</p>
+            
+            <div id="phrases-container">
+                <button class="phrase-button" data-text="こんにちは">👋 こんにちは (Konnichiwa)</button>
+                <button class="phrase-button" data-text="ありがとう">🙏 ありがとう (Arigatou)</button>
+                <button class="phrase-button" data-text="すみません、いくらですか？">🛍️ すみません、いくらですか？ (Excuse me, how much is this?)</button>
+                <button class="phrase-button" data-text="トイレはどこですか？">🚻 トイレはどこですか？ (Where is the toilet?)</button>
+                <button class="phrase-button" data-text="助けてください">🆘 助けてください (Help me, please)</button>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="learning">
+            <h2>3. 日本語学習 / Learn Japanese</h2>
+            <p>基本的な言葉を学んでみましょう。タップで発音を確認できます。</p>
+            
+            <div id="words-container">
+                <div class="word-card" onclick="speakPhrase('おはようございます')">
+                    <strong>おはようございます</strong> (Good morning)
+                </div>
+                <div class="word-card" onclick="speakPhrase('さようなら')">
+                    <strong>さようなら</strong> (Goodbye)
+                </div>
+                <div class="word-card" onclick="speakPhrase('はい')">
+                    <strong>はい</strong> (Yes) / **いいえ** (No)
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Japan Travel Helper</p>
+    </footer>
+
+    <script>
+        // Web Speech API（読み上げ機能）
+        const synthesis = window.speechSynthesis;
+
+        function speakPhrase(text) {
+            if (synthesis.speaking) {
+                console.error('すでに読み上げ中です。');
+                return;
+            }
+            if (text !== '') {
+                const utterance = new SpeechSynthesisUtterance(text);
+                // 日本語を設定
+                utterance.lang = 'ja-JP';
+                utterance.pitch = 1; // 音程
+                utterance.rate = 1;  // 速度
+                synthesis.speak(utterance);
+            }
+        }
+
+        // 会話ボタンにイベントリスナーを設定
+        document.querySelectorAll('.phrase-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const text = button.getAttribute('data-text');
+                speakPhrase(text);
+            });
+        });
+
+        // 外部翻訳サービスへのリンク生成
+        function translateText() {
+            const text = document.getElementById('inputText').value;
+            if (text.trim() === '') {
+                alert('テキストを入力してください。');
+                return;
+            }
+            // Google翻訳のURLを生成（ソース言語は自動検出、ターゲット言語は英語の想定）
+            // ユーザーの母国語に合わせるには、別途言語選択UIが必要です。
+            const encodedText = encodeURIComponent(text);
+            const googleTranslateUrl = `https://translate.google.com/?sl=auto&tl=en&text=${encodedText}&op=translate`;
+            window.open(googleTranslateUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
