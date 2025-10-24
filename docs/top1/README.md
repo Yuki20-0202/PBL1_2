@@ -1,2 +1,2 @@
 # PBL1_2
-https://yuki20-0202.github.io/top1/
+https://yuki20-0202.github.io/docs/top1/
