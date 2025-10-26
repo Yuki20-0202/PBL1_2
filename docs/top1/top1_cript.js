@@ -17,5 +17,7 @@ function toggleMenu() {
   }
 }
 function goToPage(path) {
+  event.preventDefault(); // デフォルトの # ジャンプを防ぐ
   window.location.href = path;
+
 }
